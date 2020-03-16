@@ -6,8 +6,11 @@ function useWebSocket() {
     const [connected, setConnected] = useState(false);
     const [xValue, setXValue] = useState(5);
     const [yValue, setYValue] = useState(3);
-    const sendMessage = (message) => socksClient.sendMessage('/app/command', JSON.stringify({
-        command: message,
+    const sendMessage = (x, y) => socksClient.sendMessage('/app/setup', JSON.stringify({
+        upperRight: {
+            x,
+            y,
+        },
     }));
 
     return {

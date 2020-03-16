@@ -9,7 +9,7 @@ function WebSocketComponent() {
 
     return (
         <div>
-            <SockJsClient url={wsSourceUrl} topics={['/topic/status']}
+            <SockJsClient url={wsSourceUrl} topics={['/topic/status', '/topic/command', '/topic/robot']}
                           onMessage={(message) => { console.log(message); }}
                           ref={(client) => { setSocksClient(client) }}
                           onConnect={() => { setConnected(true) }}

@@ -39,7 +39,7 @@ function ControlPanel() {
                 max={50}
                 valueLabelDisplay="auto"
             />
-            <Button variant="contained" color="primary" onClick={() => sendMessage(`${xValue} ${yValue}`)} disabled={!connected} >
+            <Button variant="contained" color="primary" onClick={() => sendMessage(xValue, yValue)} disabled={!connected} >
                 Set Coordinates
             </Button>
         </Grid>
