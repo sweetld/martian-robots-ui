@@ -5,6 +5,7 @@ import { useWebSocketContext } from './WebSocketContext';
 import ControlPanel from './ControlPanel';
 import WebSocketComponent from './WebSocketComponent';
 import MarsSurface from './MarsSurface';
+import ResultsPanel from './ResultsPanel';
 
 function Mars() {
     return (
@@ -19,6 +20,9 @@ function Mars() {
                 </Grid>
                 <Grid item xs={12} style={{ border: "black", borderStyle:"solid", borderWidth: 1, margin: 5 }}>
                     <MarsSurface />
+                </Grid>
+                <Grid item xs={12} style={{ border: "black", borderStyle:"solid", borderWidth: 1, margin: 5 }}>
+                    <ResultsPanel />
                 </Grid>
             </Grid>
         </useWebSocketContext.Provider>

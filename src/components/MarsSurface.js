@@ -53,7 +53,15 @@ function MarsSurface() {
 
     useEffect(() => {
         if (gridApi && simulationReset) {
-            gridApi.sizeColumnsToFit();
+            const itemsToUpdate = [];
+            gridApi.forEachNodeAfterFilterAndSort( function(rowNode, index) {
+                let data = rowNode.data;
+                Object.entries(data).forEach(index => {
+                    data[index] = '';
+                });
+                itemsToUpdate.push(data);
+            });
+            gridApi.updateRowData({update: itemsToUpdate});
         }
     }, [gridApi, simulationReset])
 
@@ -99,7 +107,7 @@ function MarsSurface() {
                 let data = rowNode.data;
                 // Remove the old position of the Robot
                 if (index === oldRow) {
-                    data[col] = '';
+                    data[oldCol] = '';
                 }
                 // Show the new position of the Robot
                 if (index === row) {

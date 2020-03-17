@@ -11,6 +11,7 @@ function useWebSocket() {
     const [updatedRobotMessage, setUpdatedRobotMessage] = useState(null);
     const [simulationReset, setSimulationReset] = useState(false);
     const [status, setStatus] = useState('');
+    const [simulationResults, setSimulationResults] = useState([]);
     const sendCommandMessage = (command) => socksClient.sendMessage('/app/command', JSON.stringify({
         command,
     }));
@@ -52,6 +53,10 @@ function useWebSocket() {
         if (message && message.message.includes('Simulation Reset')) {
             setSimulationReset(true);
         }
+        // If this is a Robot result
+        if (message && message.message.includes('Result')) {
+            setSimulationResults([...simulationResults, `${message.currentPosition.point.x} ${message.currentPosition.point.y} ${message.currentPosition.orientation} ${message.message}`]);
+        }
         setStatus(message.message);
 
     };
@@ -78,6 +83,8 @@ function useWebSocket() {
         setSimulationReset,
         status,
         setStatus,
+        simulationResults,
+        setSimulationResults,
     };
 }
 
