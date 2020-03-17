@@ -32,7 +32,7 @@ function buildRows(xValue, yValue) {
 }
 
 function MarsSurface() {
-    const { connected, xValue, yValue, sendCommandMessage, newRobotMessage, updatedRobotMessage, numberOfRobots } = useWebSocketContext();
+    const { connected, xValue, yValue, sendCommandMessage, newRobotMessage, updatedRobotMessage, numberOfRobots, simulationReset, status } = useWebSocketContext();
     const [cols, setCols] = useState([]);
     const [rows, setRows] = useState([]);
     const [gridApi, setGridApi] = useState(null);
@@ -50,6 +50,12 @@ function MarsSurface() {
             gridApi.sizeColumnsToFit();
         }
     }, [xValue, gridApi])
+
+    useEffect(() => {
+        if (gridApi && simulationReset) {
+            gridApi.sizeColumnsToFit();
+        }
+    }, [gridApi, simulationReset])
 
     useEffect(() => {
         if (gridApi && numberOfRobots === 0) {
@@ -91,14 +97,14 @@ function MarsSurface() {
             const itemsToUpdate = [];
             gridApi.forEachNodeAfterFilterAndSort( function(rowNode, index) {
                 let data = rowNode.data;
-                // Show the new position of the Robot
-                if (index === row) {
-                    data[col] = value;
-                };
                 // Remove the old position of the Robot
                 if (index === oldRow) {
                     data[col] = '';
                 }
+                // Show the new position of the Robot
+                if (index === row) {
+                    data[col] = value;
+                };
                 if (index === row || index === oldRow) {
                     itemsToUpdate.push(data);
                 }
@@ -113,9 +119,13 @@ function MarsSurface() {
                 Mars
             </Typography>
             <Grid item xs={12} style={{ padding: 5 }}>
-                <Button size="small" variant="contained" color="primary" onClick={() => sendCommandMessage('RUN')} disabled={!connected} >
+                <Typography variant="body1" align="left">Status: {status ? status : ''}</Typography>
+                <Typography variant="body1" align="right">Number of Robots: {numberOfRobots ? numberOfRobots : 0}</Typography>
+                <Button size="small" variant="contained" color="primary" onClick={() => sendCommandMessage('RUN')} disabled={!connected || numberOfRobots < 1} >
                     Run Simulation
                 </Button>
+            </Grid>
+            <Grid item xs={12} style={{ padding: 5 }}>
                 <div className="ag-theme-balham" style={{ height: '500px', width: '100%' }}>
                     <AgGridReact
                         columnDefs={buildCols(xValue)}

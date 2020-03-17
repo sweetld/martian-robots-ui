@@ -9,6 +9,8 @@ function useWebSocket() {
     const [numberOfRobots, setNumberOfRobots] = useState(0);
     const [newRobotMessage, setNewRobotMessage] = useState(null);
     const [updatedRobotMessage, setUpdatedRobotMessage] = useState(null);
+    const [simulationReset, setSimulationReset] = useState(false);
+    const [status, setStatus] = useState('');
     const sendCommandMessage = (command) => socksClient.sendMessage('/app/command', JSON.stringify({
         command,
     }));
@@ -29,6 +31,7 @@ function useWebSocket() {
 
     //    Integer robotId;
     //     Position currentPosition;
+    //     Position oldPosition;
     //     String message;
     function receivedStatusMessage(message) {
         console.log(message);
@@ -45,6 +48,12 @@ function useWebSocket() {
         if (message && message.message.includes('Update')) {
             setUpdatedRobotMessage(message);
         }
+        // If the simulation has been reset
+        if (message && message.message.includes('Simulation Reset')) {
+            setSimulationReset(true);
+        }
+        setStatus(message.message);
+
     };
 
     return {
@@ -64,7 +73,11 @@ function useWebSocket() {
         newRobotMessage,
         setNewRobotMessage,
         updatedRobotMessage,
-        setUpdatedRobotMessage
+        setUpdatedRobotMessage,
+        simulationReset,
+        setSimulationReset,
+        status,
+        setStatus,
     };
 }
 
