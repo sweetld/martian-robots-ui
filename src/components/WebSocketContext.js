@@ -7,7 +7,8 @@ function useWebSocket() {
     const [xValue, setXValue] = useState(5);
     const [yValue, setYValue] = useState(3);
     const [numberOfRobots, setNumberOfRobots] = useState(0);
-    const [lastRobotMessage, setLastRobotMessage] = useState(null);
+    const [newRobotMessage, setNewRobotMessage] = useState(null);
+    const [updatedRobotMessage, setUpdatedRobotMessage] = useState(null);
     const sendCommandMessage = (command) => socksClient.sendMessage('/app/command', JSON.stringify({
         command,
     }));
@@ -38,9 +39,12 @@ function useWebSocket() {
         // If successfully added Robot
         if (message && message.message.includes('Created new Robot')) {
             setNumberOfRobots(numberOfRobots + 1);
-            setLastRobotMessage(message);
+            setNewRobotMessage(message);
         }
         // If a robot has moved
+        if (message && message.message.includes('Update')) {
+            setUpdatedRobotMessage(message);
+        }
     };
 
     return {
@@ -57,8 +61,10 @@ function useWebSocket() {
         sendCommandMessage,
         receivedStatusMessage,
         numberOfRobots,
-        lastRobotMessage,
-        setLastRobotMessage,
+        newRobotMessage,
+        setNewRobotMessage,
+        updatedRobotMessage,
+        setUpdatedRobotMessage
     };
 }
 

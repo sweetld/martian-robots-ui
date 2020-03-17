@@ -32,7 +32,7 @@ function buildRows(xValue, yValue) {
 }
 
 function MarsSurface() {
-    const { connected, xValue, yValue, sendCommandMessage, lastRobotMessage, numberOfRobots } = useWebSocketContext();
+    const { connected, xValue, yValue, sendCommandMessage, newRobotMessage, updatedRobotMessage, numberOfRobots } = useWebSocketContext();
     const [cols, setCols] = useState([]);
     const [rows, setRows] = useState([]);
     const [gridApi, setGridApi] = useState(null);
@@ -55,14 +55,14 @@ function MarsSurface() {
         if (gridApi && numberOfRobots === 0) {
             gridApi.setRowData(buildRows(xValue, yValue));
         }
-    },[numberOfRobots]);
+    },[gridApi, numberOfRobots, xValue, yValue]);
 
     useEffect(() => {
-        if (gridApi && lastRobotMessage && lastRobotMessage.message && lastRobotMessage.currentPosition) {
-            const col = lastRobotMessage.currentPosition.point.x;
-            const row = lastRobotMessage.currentPosition.point.y;
-            const orientation = lastRobotMessage.currentPosition.orientation;
-            const value = `${orientation} [${lastRobotMessage.robotId}]`;
+        if (gridApi && newRobotMessage && newRobotMessage.message && newRobotMessage.currentPosition) {
+            const col = newRobotMessage.currentPosition.point.x;
+            const row = newRobotMessage.currentPosition.point.y;
+            const orientation = newRobotMessage.currentPosition.orientation;
+            const value = `${orientation} [${newRobotMessage.robotId}]`;
             const itemsToUpdate = [];
             gridApi.forEachNodeAfterFilterAndSort( function(rowNode, index) {
                 if (index !== row) {
@@ -74,7 +74,7 @@ function MarsSurface() {
             });
             gridApi.updateRowData({update: itemsToUpdate});
         }
-    }, [lastRobotMessage]);
+    }, [gridApi, newRobotMessage]);
 
     return (
         <Grid item xs={12}>
