@@ -4,13 +4,13 @@ import {WEB_SOCKET_ENDPOINT} from './Constants';
 import { useWebSocketContext } from './WebSocketContext';
 
 function WebSocketComponent() {
-    const { setConnected, setSocksClient } = useWebSocketContext();
+    const { setConnected, setSocksClient, receivedStatusMessage } = useWebSocketContext();
     const wsSourceUrl = window.location.protocol + "//" + WEB_SOCKET_ENDPOINT;
 
     return (
         <div>
             <SockJsClient url={wsSourceUrl} topics={['/topic/status', '/topic/command', '/topic/robot']}
-                          onMessage={(message) => { console.log(message); }}
+                          onMessage={(message) => { receivedStatusMessage(message); }}
                           ref={(client) => { setSocksClient(client) }}
                           onConnect={() => { setConnected(true) }}
                           onDisconnect={() => { setConnected(false) }}
