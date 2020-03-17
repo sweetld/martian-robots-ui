@@ -52,12 +52,22 @@ function MarsSurface() {
     }, [xValue, gridApi])
 
     useEffect(() => {
-        if (gridApi && lastRobotMessage && lastRobotMessage.message && lastRobotMessage.message.currentPosition) {
-            const col = lastRobotMessage.message.currentPosition.x;
-            const row = lastRobotMessage.message.currentPosition.y;
-            const value = lastRobotMessage.message.robotId;
+        if (gridApi && lastRobotMessage && lastRobotMessage.message) {
+            if (lastRobotMessage.message.includes('Created new Robot')) {
+                console.log('Here');
+            }
+        }
+
+        if (gridApi && lastRobotMessage && lastRobotMessage.message && lastRobotMessage.currentPosition) {
+            const col = lastRobotMessage.currentPosition.point.x;
+            const row = lastRobotMessage.currentPosition.point.y;
+            const orientation = lastRobotMessage.currentPosition.orientation;
+            const value = `${orientation} [${lastRobotMessage.robotId}]`;
             const itemsToUpdate = [];
             gridApi.forEachNodeAfterFilterAndSort( function(rowNode, index) {
+                if (index !== row) {
+                    return;
+                }
                 let data = rowNode.data;
                 data[col] = value;
                 itemsToUpdate.push(data);
