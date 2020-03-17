@@ -32,7 +32,7 @@ function buildRows(xValue, yValue) {
 }
 
 function MarsSurface() {
-    const { connected, xValue, yValue, sendCommandMessage, lastRobotMessage } = useWebSocketContext();
+    const { connected, xValue, yValue, sendCommandMessage, lastRobotMessage, numberOfRobots } = useWebSocketContext();
     const [cols, setCols] = useState([]);
     const [rows, setRows] = useState([]);
     const [gridApi, setGridApi] = useState(null);
@@ -52,12 +52,12 @@ function MarsSurface() {
     }, [xValue, gridApi])
 
     useEffect(() => {
-        if (gridApi && lastRobotMessage && lastRobotMessage.message) {
-            if (lastRobotMessage.message.includes('Created new Robot')) {
-                console.log('Here');
-            }
+        if (gridApi && numberOfRobots === 0) {
+            gridApi.setRowData(buildRows(xValue, yValue));
         }
+    },[numberOfRobots]);
 
+    useEffect(() => {
         if (gridApi && lastRobotMessage && lastRobotMessage.message && lastRobotMessage.currentPosition) {
             const col = lastRobotMessage.currentPosition.point.x;
             const row = lastRobotMessage.currentPosition.point.y;
