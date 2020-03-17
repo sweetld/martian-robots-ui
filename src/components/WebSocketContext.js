@@ -15,12 +15,15 @@ function useWebSocket() {
     const sendCommandMessage = (command) => socksClient.sendMessage('/app/command', JSON.stringify({
         command,
     }));
-    const sendSetupMessage = (x, y) => socksClient.sendMessage('/app/setup', JSON.stringify({
-        upperRight: {
-            x,
-            y,
-        },
-    }));
+    const sendSetupMessage = (x, y) => {
+        setSimulationResults([]);
+        socksClient.sendMessage('/app/setup', JSON.stringify({
+            upperRight: {
+                x,
+                y,
+            },
+        }));
+    };
     const sendRobotMessage = (x, y, orientation, commands) => socksClient.sendMessage('/app/robot', JSON.stringify({
         startingPoint: {
             x,
