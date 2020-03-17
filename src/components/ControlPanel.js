@@ -85,7 +85,7 @@ function ControlPanel() {
                     // value={robotPosition}
                     defaultValue={robotPosition}
                 />
-                <Button size="small" variant="contained" color="primary" onClick={handleSendRobotMessage} disabled={!connected || !setRobotCommands} >
+                <Button size="small" variant="contained" color="primary" onClick={handleSendRobotMessage} disabled={!connected || !robotCommands} >
                     Add Robot
                 </Button>
             </Grid>
