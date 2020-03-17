@@ -123,15 +123,23 @@ function MarsSurface() {
 
     return (
         <Grid item xs={12}>
-            <Typography variant="h5" align="center">
-                Mars
-            </Typography>
+            <Grid item xs={12} >
+                <Typography variant="h5" align="center">
+                    Mars
+                </Typography>
+            </Grid>
             <Grid item xs={12} style={{ padding: 5 }}>
-                <Typography variant="body1" align="left">Status: {status ? status : ''}</Typography>
-                <Typography variant="body1" align="right">Number of Robots: {numberOfRobots ? numberOfRobots : 0}</Typography>
-                <Button size="small" variant="contained" color="primary" onClick={() => sendCommandMessage('RUN')} disabled={!connected || numberOfRobots < 1} >
-                    Run Simulation
-                </Button>
+                <Grid item xs={12} >
+                    <Typography variant="body2" align="center">Status: {status ? status : ''}</Typography>
+                </Grid>
+                <Grid item xs={12} >
+                    <Typography variant="body2" align="center">Number of Robots: {numberOfRobots ? numberOfRobots : 0}</Typography>
+                </Grid>
+                <Grid item xs={12} >
+                    <Button size="small" variant="contained" color="primary" onClick={() => sendCommandMessage('RUN')} disabled={!connected || numberOfRobots < 1} >
+                        Run Simulation
+                    </Button>
+                </Grid>
             </Grid>
             <Grid item xs={12} style={{ padding: 5 }}>
                 <div className="ag-theme-balham" style={{ height: '500px', width: '100%' }}>
