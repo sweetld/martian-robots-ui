@@ -76,6 +76,37 @@ function MarsSurface() {
         }
     }, [gridApi, newRobotMessage]);
 
+    useEffect(() => {
+        if (gridApi && updatedRobotMessage && updatedRobotMessage.message && updatedRobotMessage.currentPosition) {
+            const col = updatedRobotMessage.currentPosition.point.x;
+            const row = updatedRobotMessage.currentPosition.point.y;
+            const orientation = updatedRobotMessage.currentPosition.orientation;
+            const value = `${orientation} [${updatedRobotMessage.robotId}]`;
+
+            const oldCol = updatedRobotMessage.oldPosition ? updatedRobotMessage.oldPosition.point.x : null;
+            const oldRow = updatedRobotMessage.oldPosition ? updatedRobotMessage.oldPosition.point.y : null;
+            const oldOrientation = updatedRobotMessage.oldPosition ? updatedRobotMessage.oldPosition.orientation : null;
+            const oldValue = `${oldOrientation} [${updatedRobotMessage.robotId}]`;
+
+            const itemsToUpdate = [];
+            gridApi.forEachNodeAfterFilterAndSort( function(rowNode, index) {
+                let data = rowNode.data;
+                // Show the new position of the Robot
+                if (index === row) {
+                    data[col] = value;
+                };
+                // Remove the old position of the Robot
+                if (index === oldRow) {
+                    data[col] = '';
+                }
+                if (index === row || index === oldRow) {
+                    itemsToUpdate.push(data);
+                }
+            });
+            gridApi.updateRowData({update: itemsToUpdate});
+        }
+    }, [gridApi, updatedRobotMessage]);
+
     return (
         <Grid item xs={12}>
             <Typography variant="h5" align="center">
